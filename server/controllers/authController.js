@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
-import User from "../models/User";
-import sendEmail from "../utils/sendEmail";
+import User from "../models/User.js";
+import sendEmail from "../utils/sendEmail.js";
 
 const genrateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expireIn: "7d" });
@@ -89,7 +89,7 @@ export const loginUser = async (req, res) => {
 
 // getUers
 
-export const getUers = async (req, res) => {
+export const getUsers = async (req, res) => {
         try{
         const users = await User.find({}).select('-password');
         res.json(users);
