@@ -2,6 +2,7 @@ import express, { Router } from "express";
 
 import protect from "../middleware/authMiddleware.js";
 import admin from "../middleware/adminMiddleware.js";
+import { getProducts, getProductsById, createProduct, updateProduct, deleteProduct } from "../controllers/productController.js";
 
 import multer from "multer";
 const upload = multer({ dest: "uploads/"});
