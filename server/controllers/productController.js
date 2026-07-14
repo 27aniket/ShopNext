@@ -8,7 +8,7 @@ export const getProducts = async (req, res) => {
         }catch(error){
                 res.status(500).json({message: "Server Error"});
         }
-}
+};
 
 export const getProductsById = async (req, res) => {
         try {
@@ -21,4 +21,26 @@ export const getProductsById = async (req, res) => {
         } catch (error) {
           res.status(500).json({ message: "Server Error" });
         }
+};
+
+export const createProduct = async (req, res) => {
+        try {
+            const {name, description, stock, price, category}  = req.body;
+            let imageUrl = '';
+            if(req.file){
+                const result = await cloundinary.uploader.upload(req.file.path);
+                const imageUrl = result.secure_url;
+            }
+
+            const product = new Product({
+                name, description, stock, price, imageUrl, category
+            });
+
+            const saveProduct = await product.save();
+            res.status(201).json(saveProduct);
+
+        }catch(error){
+            res.status(500).json({message: "Server Error"})
+        }
 }
+
