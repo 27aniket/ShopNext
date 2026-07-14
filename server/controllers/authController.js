@@ -2,9 +2,11 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 import User from "../models/User.js";
 import sendEmail from "../utils/sendEmail.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const genrateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expireIn: "7d" });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // Register Users
@@ -46,7 +48,13 @@ Best Regards,
 The ShopNext Team
 `;
 
+// console.log("user Created")
+
      await sendEmail(email, "Welcome to ShopNext - Your otp for registration", message)
+    //  console.log("email sent")
+
+    //  const token = genrateToken(user._id);
+    //  console.log("Token genreted")
 
      return res.status(201).json({
        _id: user.id,
@@ -56,7 +64,7 @@ The ShopNext Team
        token: genrateToken(user._id),
      });
     } else {
-      return res.json(500).status({ message: "Invalid user data" });
+      return res.status(500).json({ message: "Invalid user data" });
     }
   } catch (err) {
     return res.status(500).json({ message: "Server Error" });
@@ -68,7 +76,7 @@ The ShopNext Team
 export const loginUser = async (req, res) => {
         const {email, password} = req.body
         try{ 
-                const user = await User.find({email});
+                const user = await User.findOne({email});
                 if(user && (await bcrypt.compare(password, user.password))) {
                         res.json({
                                 _id: user.id,
