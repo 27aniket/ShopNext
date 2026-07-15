@@ -12,7 +12,7 @@ const genrateToken = (id) => {
 // Register Users
 
 export const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -21,7 +21,7 @@ export const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedpassword = await bcrypt.hash(password, salt);
 
-    const user = await User.create({ name, email, password: hashedpassword });
+    const user = await User.create({name, email, password: hashedpassword, role});
 
     if (user) {
       const otp = Math.floor(100000 + Math.random() * 900000).toString();

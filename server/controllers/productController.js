@@ -1,5 +1,5 @@
-import Product from "../models/Product";
-import cloundinary from "../config/cloudinary";
+import Product from "../models/Product.js";
+import cloudinary from "../config/cloudinary.js";
 
 export const getProducts = async (req, res) => {
         try{
@@ -28,8 +28,9 @@ export const createProduct = async (req, res) => {
             const {name, description, stock, price, category}  = req.body;
             let imageUrl = '';
             if(req.file){
-                const result = await cloundinary.uploader.upload(req.file.path);
-                const imageUrl = result.secure_url;
+                const result = await cloudinary.uploader.upload(req.file.path);
+                // console.log(result)
+                imageUrl = result.secure_url;
             }
 
             const product = new Product({
@@ -40,6 +41,7 @@ export const createProduct = async (req, res) => {
             res.status(201).json(saveProduct);
 
         }catch(error){
+                console.error(error)
             res.status(500).json({message: "Server Error"})
         }
 };
@@ -57,7 +59,7 @@ export const updateProduct = async (req, res) => {
                 product.price = price || product.price;
                 
                 if(req.file){
-                        const result = await cloundinary.uploader.upload(req.file.path);
+                        const result = await cloudinary.uploader.upload(req.file.path);
                         product.imageUrl = result.secure_url;
                 }
 
@@ -79,7 +81,7 @@ export const deleteProduct = async (req, res) => {
 
           if(product){
                 await product.deleteOne();
-                res.json({message: "Product Removed"})
+                res.json({message: "Product Deleted"})
           }
         }catch(error){
                 res.status(500).json({message: "Server Error"})

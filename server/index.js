@@ -3,6 +3,15 @@ import cors from "cors"
 import "dotenv/config";
 import connectDB from "./config/db.js"
 import authRoute from "./routes/authRoute.js"
+import productRoute from "./routes/productRoute.js";
+// import cloudinary from "./config/cloudinary.js";
+
+// try {
+//   const result = await cloudinary.api.ping();
+//   console.log(result);
+// } catch (err) {
+//   console.log(err);
+// }
 
 const app = express();
 app.use(cors());
@@ -15,9 +24,9 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/auth", authRoute);
-// app.use("/api/products", productRoutes);
-// app.use("/api/orders", orderRoutes);
-// app.use("/api/payment", paymentRoutes);
+app.use("/api/products", productRoute);
+app.use("/api/orders", orderRoute);
+// app.use("/api/payment", paymentRoute);
 
 const PORT = process.env.PORT || 5500
 app.listen(PORT, () => {
